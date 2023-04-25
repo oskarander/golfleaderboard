@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golf Leaderboard API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #results {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Golf Leaderboard</h1>
+    <button id="loadData">Load Data</button>
+    <div id="results"></div>
+
+    <script>
+        document.getElementById('loadData').addEventListener('click', function() {
+            const data = null;
+            const xhr = new XMLHttpRequest();
+            xhr.withCredentials = true;
+
+            xhr.addEventListener('readystatechange', function () {
+                if (this.readyState === this.DONE) {
+                    const results = JSON.parse(this.responseText);
+                    displayResults(results);
+                }
+            });
+
+            xhr.open('GET', 'https://golf-leaderboard-data.p.rapidapi.com/fixtures/2/2023');
+            xhr.setRequestHeader('content-type', 'application/octet-stream');
+            xhr.setRequestHeader('X-RapidAPI-Key', '5bafd4ae9fmsh7104b6d78f98516p1b2e71jsn9b72b95b1cfc');
+            xhr.setRequestHeader('X-RapidAPI-Host', 'golf-leaderboard-data.p.rapidapi.com');
+            xhr.send(data);
+        });
+
+        function displayResults(results) {
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = '';
+
+    if (results && results.results) {
+        const list = document.createElement('ul');
+        results.results.forEach(item => {
+            const listItem = document.createElement('li');
+            listItem.textContent = 'ID: ' + item.id + ', Name: ' + item.name + ', Start Date: ' + item.start_date;
+            list.appendChild(listItem);
+        });
+        resultsDiv.appendChild(list);
+    } else {
+        resultsDiv.textContent = 'No data available.';
+    }
+}
+
+
+    </script>
+</body>
+</html>
